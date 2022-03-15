@@ -36,7 +36,13 @@ defmodule TwitchAutodl.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:phoenix_pubsub, "~> 2.0"}
+      {:phoenix_pubsub, "~> 2.0"},
+      {:jason, "~> 1.2"},
+      {:tesla, "~> 1.4"},
+      {:hackney, "~> 1.17"},
+
+      # TODO: Use proper dependency
+      {:config_server, path: "../../../config_server"}
     ]
   end
 
