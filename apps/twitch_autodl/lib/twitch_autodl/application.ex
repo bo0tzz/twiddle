@@ -10,8 +10,6 @@ defmodule TwitchAutodl.Application do
     children = [
       # Start the PubSub system
       {Phoenix.PubSub, name: TwitchAutodl.PubSub}
-      # Start a worker by calling: TwitchAutodl.Worker.start_link(arg)
-      # {TwitchAutodl.Worker, arg}
     ]
 
     Supervisor.start_link(children, strategy: :one_for_one, name: TwitchAutodl.Supervisor)
