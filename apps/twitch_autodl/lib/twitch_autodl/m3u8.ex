@@ -3,7 +3,7 @@ defmodule TwitchAutodl.M3U8 do
 
   alias TwitchAutodl.M3U8
 
-  defstruct [:base, :qualities, :playlist_file]
+  defstruct [:base, :qualities, :playlist_file, :original_playlist]
 
   def new(playlist) do
     urls = get_playlist_entries(playlist)
@@ -15,7 +15,8 @@ defmodule TwitchAutodl.M3U8 do
     %M3U8{
       base: base,
       qualities: qualities,
-      playlist_file: playlist_file
+      playlist_file: playlist_file,
+      original_playlist: playlist
     }
   end
 

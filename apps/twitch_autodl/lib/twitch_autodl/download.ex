@@ -2,8 +2,6 @@ defmodule TwitchAutodl.Download do
   require Logger
   alias TwitchAutodl.M3U8
 
-  defstruct [:base, :chunks, :path]
-
   def download_chunks(m3u8, quality, base_path) do
     base_url = M3U8.base_url(m3u8, quality)
 
