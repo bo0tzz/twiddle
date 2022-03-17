@@ -40,6 +40,7 @@ defmodule TwitchAutodl.MixProject do
       {:jason, "~> 1.2"},
       {:tesla, "~> 1.4"},
       {:hackney, "~> 1.17"},
+      {:erlexec, "~> 1.0"},
 
       # TODO: Use proper dependency
       {:config_server, path: "../../../config_server"}
