@@ -12,6 +12,7 @@ defmodule TwitchAutodl.Download do
     end
 
     index = M3U8.chunks(m3u8, quality)
+
     Path.join(base_path, "index.m3u8")
     |> File.write(index)
 

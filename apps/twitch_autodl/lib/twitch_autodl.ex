@@ -10,10 +10,10 @@ defmodule TwitchAutodl do
   def download_vod(id, base_path) do
     path = Path.absname(base_path)
 
-    m3u8 = TwitchAutodl.Twitch.Vod.playlist(id)
-    |> TwitchAutodl.M3U8.new()
+    m3u8 =
+      TwitchAutodl.Twitch.Vod.playlist(id)
+      |> TwitchAutodl.M3U8.new()
 
     TwitchAutodl.Download.download_chunks(m3u8, "chunked", base_path)
-
   end
 end
