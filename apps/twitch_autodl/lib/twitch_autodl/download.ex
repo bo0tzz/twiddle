@@ -11,7 +11,11 @@ defmodule TwitchAutodl.Download do
       {url, path}
     end
 
-    M3U8.chunks(m3u8, quality)
+    index = M3U8.chunks(m3u8, quality)
+    Path.join(base_path, "index.m3u8")
+    |> File.write(index)
+
+    M3U8.get_playlist_entries(index)
     |> Enum.map(chunk_to_job)
     |> Task.async_stream(&download_chunk/1, timeout: :infinity)
     |> Stream.run()

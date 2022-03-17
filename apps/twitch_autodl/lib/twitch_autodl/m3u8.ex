@@ -30,16 +30,15 @@ defmodule TwitchAutodl.M3U8 do
     %{base | path: path} |> URI.to_string()
   end
 
-  defp get_playlist_entries(playlist) do
+  def get_playlist_entries(playlist) do
     playlist
     |> String.split()
     |> Enum.reject(&String.starts_with?(&1, "#"))
   end
 
   def chunks(m3u8, quality) do
-    playlist_url = M3U8.build_url(m3u8, quality)
-    {:ok, playlist} = Tesla.get(playlist_url)
-    M3U8.get_playlist_entries(playlist.body)
+    playlist_url = build_url(m3u8, quality)
+    Tesla.get!(playlist_url).body
   end
 
   def base_url(%M3U8{base: base}, quality), do: URI.to_string(base) |> Path.join(quality)
