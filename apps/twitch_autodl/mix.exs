@@ -42,6 +42,7 @@ defmodule TwitchAutodl.MixProject do
       {:hackney, "~> 1.17"},
       {:erlexec, "~> 1.0"},
       {:timex, "~> 3.0"},
+      {:neuron, "~> 5.0.0"},
 
       # TODO: Use proper dependency
       {:config_server, path: "../../../config_server"}

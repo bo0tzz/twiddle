@@ -7,6 +7,9 @@ defmodule TwitchAutodl.Application do
 
   @impl true
   def start(_type, _args) do
+    Neuron.Config.set(url: "https://gql.twitch.tv/gql")
+    Neuron.Config.set(headers: ["Client-Id": "kimne78kx3ncx6brgo4mv6wki5h1ko"])
+
     children = [
       # Start the PubSub system
       {Phoenix.PubSub, name: TwitchAutodl.PubSub}
