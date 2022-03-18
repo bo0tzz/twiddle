@@ -27,7 +27,7 @@ defmodule TwitchAutodl.M3U8Test do
              "https://dgeft87wbj63p.cloudfront.net/73beaf75f7ac5dbcda3b_wirtual_44960203756_1647255903"
 
     assert out.qualities == ["chunked", "720p60", "720p30", "480p30", "360p30"]
-    assert out.playlist_file == "index-dvr.m3u8"
+    assert out.filename == "index-dvr.m3u8"
   end
 
   test "URL building works as expected" do
@@ -48,7 +48,7 @@ defmodule TwitchAutodl.M3U8Test do
              "https://dgeft87wbj63p.cloudfront.net/73beaf75f7ac5dbcda3b_wirtual/44960203756_1647255903"
 
     assert out.qualities == ["chunked", "720p60"]
-    assert out.playlist_file == "index-dvr.m3u8"
+    assert out.filename == "index-dvr.m3u8"
 
     urls = M3U8.build_urls(out)
 

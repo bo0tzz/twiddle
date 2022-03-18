@@ -3,19 +3,19 @@ defmodule TwitchAutodl.M3U8 do
 
   alias TwitchAutodl.M3U8
 
-  defstruct [:base, :qualities, :playlist_file, :original_playlist]
+  defstruct [:base, :qualities, :filename, :original_playlist] #TODO: Do I need original_playlist?
 
   def new(playlist) do
     urls = get_playlist_entries(playlist)
 
     parts = Enum.map(urls, &snip_url/1)
-    {playlist_file, _, base} = List.first(parts)
+    {filename, _, base} = List.first(parts)
     qualities = ["chunked" | Enum.map(parts, &elem(&1, 1))]
 
     %M3U8{
       base: base,
       qualities: qualities,
-      playlist_file: playlist_file,
+      filename: filename,
       original_playlist: playlist
     }
   end
@@ -24,7 +24,7 @@ defmodule TwitchAutodl.M3U8 do
     Enum.map(qualities, &build_url(m3u8, &1))
   end
 
-  defp build_url(%M3U8{base: base, playlist_file: file}, quality) do
+  defp build_url(%M3U8{base: base, filename: file}, quality) do
     parts = Path.split(base.path) ++ [quality, file]
     path = Path.join(parts)
     %{base | path: path} |> URI.to_string()

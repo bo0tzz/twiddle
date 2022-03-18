@@ -13,7 +13,7 @@ defmodule TwitchAutodl.FFmpeg.Server do
   end
 
   @impl true
-  def init({cmd, path, parent}) do
+  def init({cmd, path, expected_duration, parent}) do
     options = [
       :stderr,
       :monitor,
@@ -26,13 +26,14 @@ defmodule TwitchAutodl.FFmpeg.Server do
      %Server{
        path: path,
        pids: {pid, ospid},
-       status: %{},
+       status: %{duration: expected_duration},
        parent: parent
      }}
   end
 
   @impl true
   def handle_info({:stderr, _, data}, state) do
+    Logger.debug("FFmpeg message: #{data}")
     state = process_ffmpeg_output(data, state)
     {:noreply, state}
   end
@@ -44,31 +45,47 @@ defmodule TwitchAutodl.FFmpeg.Server do
     {:stop, :normal, state}
   end
 
-  def process_ffmpeg_output("Input #0, " <> _ = output, %Server{status: status} = state) do
-    duration = Regex.run(@duration_regex, output, capture: :all_but_first)
-               |> as_duration
-    status = Map.put(status, :duration, duration)
-    %{state | status: status}
-  end
+  def process_ffmpeg_output("frame=" <> _ = output, %Server{status: status} = state) do
+    progress =
+      Regex.run(@time_regex, output, capture: :all_but_first)
+      |> as_duration
 
-  def process_ffmpeg_output("frame= " <> _ = output, %Server{status: status} = state) do
-    progress = Regex.run(@time_regex, output, capture: :all_but_first)
-    |> as_duration
     status = Map.put(status, :progress, progress)
     log_progress(status)
     %{state | status: status}
   end
 
-  def process_ffmpeg_output(_output, state), do: state
+  def process_ffmpeg_output(output, %Server{status: status} = state) do
+    if String.contains?(output, "Duration") do
+      duration =
+        Regex.run(@duration_regex, output, capture: :all_but_first)
+        |> as_duration
+        |> case do
+          nil -> Map.get(status, :duration)
+          duration -> duration
+        end
 
-  def log_progress(status) do
-    with {:ok, duration} <- Map.fetch(status, :duration),
-         {:ok, progress} <- Map.fetch(status, :progress) do
-      percent = Timex.Duration.to_seconds(progress) / Timex.Duration.to_seconds(duration) * 100 |> round()
-      Logger.info("Progress: #{percent}%")
+      Logger.info("Duration of file being processed: #{duration |> Timex.Duration.to_string()}")
+
+      status = Map.put(status, :duration, duration)
+      %{state | status: status}
+    else
+#      Logger.debug("Unknown ffmpeg message: #{inspect(output)}")
+      state
     end
   end
 
+  def log_progress(status) do
+    {:ok, duration} = Map.fetch(status, :duration)
+    {:ok, progress} = Map.fetch(status, :progress)
+    percent =
+      (Timex.Duration.to_seconds(progress) / Timex.Duration.to_seconds(duration) * 100)
+      |> round()
+
+    Logger.info("Progress: #{percent}%")
+  end
+
+  def as_duration(nil), do: nil
   def as_duration(time) do
     time
     |> Enum.map(&String.to_integer/1)
