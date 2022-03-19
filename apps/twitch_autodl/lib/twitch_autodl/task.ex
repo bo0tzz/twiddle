@@ -12,7 +12,7 @@ defmodule TwitchAutodl.Task do
     TwitchAutodl.Task.Remux,
     TwitchAutodl.Task.Subtitles,
     TwitchAutodl.Task.MoveFiles,
-#    TwitchAutodl.Task.Cleanup
+    TwitchAutodl.Task.Cleanup
   ]
 
   def run(%State{next_tasks: []}), do: :finished

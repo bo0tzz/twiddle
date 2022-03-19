@@ -7,5 +7,4 @@ defmodule TwitchAutodl.Task.Cleanup do
       error -> error
     end
   end
-
 end
