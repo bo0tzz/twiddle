@@ -26,7 +26,7 @@ defmodule TwitchAutodl.FFmpeg.Server do
      %Server{
        path: path,
        pids: {pid, ospid},
-       status: %{duration: expected_duration},
+       status: %{duration: Timex.Duration.from_seconds(expected_duration)},
        parent: parent
      }}
   end
@@ -45,7 +45,10 @@ defmodule TwitchAutodl.FFmpeg.Server do
     {:stop, :normal, state}
   end
 
-  def process_ffmpeg_output("frame=" <> _ = output, %Server{status: status} = state) do
+  def process_ffmpeg_output("frame=" <> _ = output, state), do: parse_time_remaining(output, state)
+  def process_ffmpeg_output("size=" <> _ = output, state), do: parse_time_remaining(output, state)
+# TODO: Proper ffmpeg progress parsing
+  def parse_time_remaining(output, state) do
     progress =
       Regex.run(@time_regex, output, capture: :all_but_first)
       |> as_duration
@@ -70,7 +73,7 @@ defmodule TwitchAutodl.FFmpeg.Server do
       status = Map.put(status, :duration, duration)
       %{state | status: status}
     else
-#      Logger.debug("Unknown ffmpeg message: #{inspect(output)}")
+      #      Logger.debug("Unknown ffmpeg message: #{inspect(output)}")
       state
     end
   end
@@ -78,6 +81,7 @@ defmodule TwitchAutodl.FFmpeg.Server do
   def log_progress(status) do
     {:ok, duration} = Map.fetch(status, :duration)
     {:ok, progress} = Map.fetch(status, :progress)
+
     percent =
       (Timex.Duration.to_seconds(progress) / Timex.Duration.to_seconds(duration) * 100)
       |> round()
@@ -86,6 +90,7 @@ defmodule TwitchAutodl.FFmpeg.Server do
   end
 
   def as_duration(nil), do: nil
+
   def as_duration(time) do
     time
     |> Enum.map(&String.to_integer/1)

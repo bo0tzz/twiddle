@@ -1,7 +1,7 @@
 defmodule TwitchAutodl.Task.State do
   alias TwitchAutodl.Task.State
 
-  defstruct [:id, :data, :next_tasks]
+  defstruct [:id, :data, :next_tasks, :stats]
 
   def new(id, path) when is_integer(id), do: Integer.to_string(id) |> new(path)
 
@@ -10,7 +10,8 @@ defmodule TwitchAutodl.Task.State do
       id: id,
       data: %{
         path: path
-      }
+      },
+      stats: %{}
     }
   end
 end
