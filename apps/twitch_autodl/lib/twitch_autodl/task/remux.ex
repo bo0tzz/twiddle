@@ -3,9 +3,6 @@ defmodule TwitchAutodl.Task.Remux do
 
   def run(%State{data: %{duration: duration, working_dir: path}} = state) do
     TwitchAutodl.FFmpeg.remux(path, duration)
-
-    receive do
-      {:done, ^path} -> {:ok, state}
-    end
+    {:ok, state}
   end
 end
