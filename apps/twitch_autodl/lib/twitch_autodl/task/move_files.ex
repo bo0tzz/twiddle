@@ -3,12 +3,14 @@ defmodule TwitchAutodl.Task.MoveFiles do
 
   alias TwitchAutodl.Task.State
 
-  def run(%State{data: %{title: title, working_dir: path}} = state) do
+  def run(%State{data: %{title: title, working_dir: path}, options: options} = state) do
     filename = String.replace(title, "/", "-")
 
-    case move_file(path, filename, ".srt") do
-      {:error, error} -> Logger.warn("Error while moving file #{filename}.srt: #{error}")
-      :ok -> :ok
+    if options[:extract_subtitles] do
+      case move_file(path, filename, ".srt") do
+        {:error, error} -> Logger.warn("Error while moving file #{filename}.srt: #{error}")
+        :ok -> :ok
+      end
     end
 
     case move_file(path, filename, ".mkv") do

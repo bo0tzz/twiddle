@@ -48,8 +48,9 @@ defmodule TwitchAutodl.FFmpeg do
       {:DOWN, ^ospid, :process, ^pid, :normal} ->
         :done
 
-      other -> Logger.warn("Received unexpected ffmpeg message: #{inspect(other)}")
-      other
+      other ->
+        Logger.warn("Received unexpected ffmpeg message: #{inspect(other)}")
+        other
     end
   end
 end
