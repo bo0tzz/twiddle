@@ -13,7 +13,8 @@ defmodule TwitchAutodl.Application do
     children = [
       # Start the PubSub system
       {Phoenix.PubSub, name: TwitchAutodl.PubSub},
-      TwitchAutodl.Task.State
+      TwitchAutodl.Task.State,
+      {TwitchAutodl, "/tmp/twiddle/"}
     ]
 
     Supervisor.start_link(children, strategy: :one_for_one, name: TwitchAutodl.Supervisor)

@@ -19,13 +19,14 @@ defmodule TwitchAutodl.Task.State do
     }
   end
 
-  def get_state(id) when is_integer(id), do: Integer.to_string(id) |> get_state()
-    def get_state(id) do
+  def get_task(id) when is_integer(id), do: Integer.to_string(id) |> get_task()
+
+  def get_task(id) do
     ConfigServer.get(__MODULE__, &Map.fetch(&1, id))
   end
 
-  def save_state(%State{id: id} = state) do
-    ConfigServer.update(__MODULE__, &Map.put(&1, id, state))
+  def save_task(%State{id: id} = task) do
+    ConfigServer.update(__MODULE__, &Map.put(&1, id, task))
   end
 
   # Turn this into a use ConfigServer?
