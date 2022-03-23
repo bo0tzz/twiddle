@@ -49,7 +49,9 @@ defmodule TwitchAutodlWeb.MixProject do
       {:gettext, "~> 0.18"},
       {:twitch_autodl, in_umbrella: true},
       {:jason, "~> 1.2"},
-      {:plug_cowboy, "~> 2.5"}
+      {:plug_cowboy, "~> 2.5"},
+      {:ex_fontawesome, "~> 0.7.0"},
+      {:tailwind, "~> 0.1", only: :dev}
     ]
   end
 
@@ -59,7 +61,7 @@ defmodule TwitchAutodlWeb.MixProject do
   defp aliases do
     [
       setup: ["deps.get"],
-      "assets.deploy": ["esbuild default --minify", "phx.digest"]
+      "assets.deploy": ["tailwind default --minify", "esbuild default --minify", "phx.digest"]
     ]
   end
 end
