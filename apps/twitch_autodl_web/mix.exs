@@ -24,7 +24,7 @@ defmodule TwitchAutodlWeb.MixProject do
   def application do
     [
       mod: {TwitchAutodlWeb.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :twitch_autodl]
     ]
   end
 

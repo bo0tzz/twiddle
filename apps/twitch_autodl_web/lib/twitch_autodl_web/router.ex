@@ -19,6 +19,7 @@ defmodule TwitchAutodlWeb.Router do
 
     get "/", PageController, :index
     post "/", PageController, :create
+    resources "/tasks", TaskController, only: [:index, :show]
   end
 
   # Other scopes may use custom stacks.

@@ -6,11 +6,11 @@ defmodule TwitchAutodlWeb.PageController do
     render(conn, "index.html")
   end
 
-  def create(conn, _params) do
-    # TODO:
-    # Validate URL from params
-    # Create new download task for URL
-    # Redirect to download task page
-    render(conn, "index.html")
+  def create(conn, %{"url" => url}) do
+    Logger.info("Got create for url #{url}")
+    case TwitchAutodl.download(url) do
+      {:ok, id} -> redirect(conn, to: Routes.task_path(TwitchAutodlWeb.Endpoint, :show, id))
+      {:error, message} ->  render(conn, "index.html", url_error: message)
+    end
   end
 end
