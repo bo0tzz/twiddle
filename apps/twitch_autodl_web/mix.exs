@@ -51,7 +51,9 @@ defmodule TwitchAutodlWeb.MixProject do
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
       {:ex_fontawesome, "~> 0.7.0"},
-      {:tailwind, "~> 0.1", only: :dev}
+      {:tailwind, "~> 0.1", only: :dev},
+      # TODO: This formatter will be included in a new liveview release
+      {:heex_formatter, github: "feliperenan/heex_formatter", only: :dev}
     ]
   end
 

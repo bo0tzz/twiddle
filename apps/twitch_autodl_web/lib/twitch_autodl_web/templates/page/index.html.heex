@@ -1,16 +1,20 @@
 <div class="flex flex-col items-center gap-2">
   <%= if assigns[:url_error] do %>
-  <div class="alert alert-error shadow-lg w-1/2">
-    <div>
-      <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-      <span><%= @url_error %></span>
+    <div class="alert alert-error shadow-lg w-1/2">
+      <div>
+        <%= FontAwesome.icon("circle-xmark", type: "regular", class: "h-6 w-6") %>
+        <span><%= @url_error %></span>
+      </div>
     </div>
-  </div>
   <% end %>
   <div class="w-2/5">
-    <%= form_for @conn, Routes.page_path(@conn, :create), [], fn f -> %>
-      <%= url_input f, :url, placeholder: "Twitch url", class: ["input", "input-bordered", "w-3/5"], required: true %>
-      <%= submit "Download", class: "btn btn-info" %>
+    <%= form_for @conn, Routes.page_path(@conn, :create), [class: "input-group"], fn f -> %>
+      <%= url_input(f, :url,
+        placeholder: "Twitch url",
+        class: ["input", "input-bordered", "w-3/5"],
+        required: true
+      ) %>
+      <%= submit("Download", class: "btn btn-info") %>
     <% end %>
   </div>
 </div>

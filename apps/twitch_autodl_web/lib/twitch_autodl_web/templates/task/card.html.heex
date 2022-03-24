@@ -1,9 +1,9 @@
 <div class="card bg-neutral text-neutral-content">
-    <div class="card-body items-center text-center">
-        <h2 class="card-title">
-            <%= link @task.id, to: Routes.task_path(@conn, :show, @task.id) %>
-        </h2>
-        <p>Next step: <%= List.first(@task.next_tasks) %></p>
-        <p>Download path: <%= @task.data.path %></p>
-    </div>
+  <div class="card-body items-center text-center">
+    <h2 class="card-title">
+      <%= link(@task.id, to: Routes.task_path(@conn, :show, @task.id)) %>
+    </h2>
+    <p>Next step: <%= List.first(@task.next_tasks) %></p>
+    <p>Download path: <%= @task.data.path %></p>
+  </div>
 </div>
