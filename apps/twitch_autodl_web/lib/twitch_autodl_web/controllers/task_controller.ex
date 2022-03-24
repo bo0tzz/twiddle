@@ -8,11 +8,14 @@ defmodule TwitchAutodlWeb.TaskController do
 
   def show(conn, %{"id" => id}) do
     case TwitchAutodl.get_task(id) do
-      {:ok, task} -> render(conn, "show.html", task: task)
-      :error -> conn
-                |> put_status(:not_found)
-                |> put_view(TwitchAutodlWeb.ErrorView)
-                |> render(:"404")
+      {:ok, task} ->
+        render(conn, "show.html", task: task)
+
+      :error ->
+        conn
+        |> put_status(:not_found)
+        |> put_view(TwitchAutodlWeb.ErrorView)
+        |> render(:"404")
     end
   end
 end

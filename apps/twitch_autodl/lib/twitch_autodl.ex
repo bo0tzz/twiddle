@@ -47,7 +47,7 @@ defmodule TwitchAutodl do
   defp validate_host("www." <> host), do: validate_host(host)
   defp validate_host("twitch.tv"), do: :ok
   defp validate_host(nil), do: {:error, "Missing host"}
-  defp validate_host(host), do: {:error, "Unsupported host: " <> IO.inspect(host)}
+  defp validate_host(host), do: {:error, "Unsupported host: " <> host}
 
   defp get_vod_id(path) when is_binary(path), do: Path.split(path) |> get_vod_id()
   defp get_vod_id(["/" | path]), do: get_vod_id(path)
