@@ -7,7 +7,8 @@ defmodule TwitchAutodl do
   end
 
   @impl true
-  def init(path) do
+  def init(_arg) do
+    path = TwitchAutodl.Settings.download_folder()
     {:ok, %{path: path}}
   end
 

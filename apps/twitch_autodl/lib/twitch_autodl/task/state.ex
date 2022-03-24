@@ -35,8 +35,7 @@ defmodule TwitchAutodl.Task.State do
     options =
       [
         name: __MODULE__,
-        # TODO: Get this from config
-        path: "state.db",
+        path: &TwitchAutodl.Settings.database_file/0,
         default_fn: fn -> %{} end
       ]
       |> Keyword.merge(arg)
