@@ -1,0 +1,26 @@
+<div class="flex flex-col items-center gap-2">
+  <h1 class="text-2xl font-bold">Settings</h1>
+  <%= form_for @conn, Routes.settings_path(@conn, :update), [as: :settings, class: "flex flex-col w-full items-center"], fn f -> %>
+    <div class="form-control w-full max-w-xs">
+      <label class="label">
+        <span class="label-text">Download folder</span>
+      </label>
+      <%= text_input(f, :download_folder,
+        value: @download_folder,
+        class: ["input", "input-bordered", "w-full"],
+        required: true
+      ) %>
+    </div>
+    <div class="form-control w-full max-w-xs">
+      <label class="label">
+        <span class="label-text">Database file</span>
+      </label>
+      <%= text_input(f, :database_file,
+        value: @database_file,
+        class: ["input", "input-bordered", "w-full"],
+        required: true
+      ) %>
+    </div>
+    <%= submit("Save", class: "btn btn-success mt-2") %>
+  <% end %>
+</div>
