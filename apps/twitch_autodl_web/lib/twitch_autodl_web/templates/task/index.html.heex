@@ -1,1 +1,8 @@
-<%= inspect(@tasks) %>
+<div class="divider">Finished tasks</div>
+<div class="flex flex-wrap justify-center gap-2">
+    <%= for task <- @tasks do %>
+    <div class="sm:w-full md:w-1/4">
+        <%= render "card.html", task: task, conn: @conn %>
+    </div>
+    <% end %>
+</div>

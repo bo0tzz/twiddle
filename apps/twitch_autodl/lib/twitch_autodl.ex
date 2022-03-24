@@ -14,15 +14,18 @@ defmodule TwitchAutodl do
   # TODO: Pull genserver out into separate module
   @impl true
   def handle_call({:download, url}, _from, %{path: path} = state) do
+    # TODO: Check if task already exists
     result =
       with {:ok, %{host: host, path: url_path}} <- as_uri(url),
            :ok <- validate_host(host),
            {:ok, id} <- get_vod_id(url_path),
-           state <- TwitchAutodl.Task.State.new(id, path) do
+           state <- TwitchAutodl.Task.State.new(id, path),
+           state <- TwitchAutodl.Task.initialize(state) do
         Logger.info("Creating new download task for vod ID #{id}")
         :ok = TwitchAutodl.Task.State.save_task(state)
         {:ok, id}
       end
+
     {:reply, result, state}
   end
 
@@ -30,6 +33,7 @@ defmodule TwitchAutodl do
     GenServer.call(__MODULE__, {:download, url})
   end
 
+  def get_tasks(), do: TwitchAutodl.Task.State.get_tasks()
   def get_task(id), do: TwitchAutodl.Task.State.get_task(id)
 
   defp as_uri(url) do

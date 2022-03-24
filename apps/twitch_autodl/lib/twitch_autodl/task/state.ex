@@ -19,6 +19,7 @@ defmodule TwitchAutodl.Task.State do
     }
   end
 
+  def get_tasks(), do: ConfigServer.get(__MODULE__, &Map.values/1)
   def get_task(id) when is_integer(id), do: Integer.to_string(id) |> get_task()
 
   def get_task(id) do
