@@ -1,9 +1,12 @@
 defmodule TwitchAutodl.Task.Subtitles do
   alias TwitchAutodl.Task.State
 
-  def run(%State{data: %{duration: duration, working_dir: path}, options: options} = state) do
+  def run(
+        %State{id: id, data: %{duration: duration, working_dir: path}, options: options} = state
+      ) do
     if options[:extract_subtitles] do
-      :done = TwitchAutodl.FFmpeg.extract_subs(path, duration)
+      :done =
+        TwitchAutodl.FFmpeg.extract_subs(path, duration, &State.set_progress(id, __MODULE__, &1))
     end
 
     {:ok, state}

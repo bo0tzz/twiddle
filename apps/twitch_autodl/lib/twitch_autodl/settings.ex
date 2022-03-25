@@ -12,12 +12,14 @@ defmodule TwitchAutodl.Settings do
 
   def put_settings(map) do
     with {:ok, struct} <- Maptu.strict_struct(__MODULE__, map) do
-      extract_subtitles = case struct.extract_subtitles do
-        "true" -> true
-        "false" -> false
-        val when is_boolean(val) -> val
-        invalid -> raise ArgumentError, message: "Not a boolean: #{invalid}"
-      end
+      extract_subtitles =
+        case struct.extract_subtitles do
+          "true" -> true
+          "false" -> false
+          val when is_boolean(val) -> val
+          invalid -> raise ArgumentError, message: "Not a boolean: #{invalid}"
+        end
+
       %{struct | extract_subtitles: extract_subtitles}
       |> put_settings()
     end

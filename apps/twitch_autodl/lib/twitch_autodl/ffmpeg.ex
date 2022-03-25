@@ -4,25 +4,25 @@ defmodule TwitchAutodl.FFmpeg do
   alias TwitchAutodl.FFmpeg
   alias TwitchAutodl.FFmpeg.Parser
 
-  defstruct [:pids, :status]
+  defstruct [:pids, :status, :update_progress]
 
-  @concat_cmd 'ffmpeg -i index.m3u8 -codec copy index.ts'
-  @remux_cmd 'ffmpeg -i index.ts -codec copy index.mkv'
-  @subs_cmd 'ffmpeg -f lavfi -i "movie=index.ts[out0+subcc]" index.srt'
+  @concat_cmd 'ffmpeg -i index.m3u8 -codec copy index.ts -y'
+  @remux_cmd 'ffmpeg -i index.ts -codec copy index.mkv -y'
+  @subs_cmd 'ffmpeg -f lavfi -i "movie=index.ts[out0+subcc]" index.srt -y'
 
-  def concatenate_chunks(path, duration) do
-    run(@concat_cmd, path, duration)
+  def concatenate_chunks(path, duration, update_progress) do
+    run(@concat_cmd, path, duration, update_progress)
   end
 
-  def remux(path, duration) do
-    run(@remux_cmd, path, duration)
+  def remux(path, duration, update_progress) do
+    run(@remux_cmd, path, duration, update_progress)
   end
 
-  def extract_subs(path, duration) do
-    run(@subs_cmd, path, duration)
+  def extract_subs(path, duration, update_progress) do
+    run(@subs_cmd, path, duration, update_progress)
   end
 
-  def run(command, path, duration_hint) do
+  def run(command, path, duration_hint, update_progress) do
     options = [
       :stderr,
       :monitor,
@@ -33,16 +33,20 @@ defmodule TwitchAutodl.FFmpeg do
 
     state = %FFmpeg{
       pids: {pid, ospid},
-      status: Parser.new(duration_hint)
+      status: Parser.new(duration_hint),
+      update_progress: update_progress
     }
 
     receive_loop(state)
   end
 
-  def receive_loop(%FFmpeg{status: status, pids: {pid, ospid}} = state) do
+  def receive_loop(
+        %FFmpeg{status: status, pids: {pid, ospid}, update_progress: update_progress} = state
+      ) do
     receive do
       {:stderr, ^ospid, data} ->
         status = Parser.parse(data, status)
+        Parser.progress(status) |> update_progress.()
         receive_loop(%{state | status: status})
 
       {:DOWN, ^ospid, :process, ^pid, :normal} ->

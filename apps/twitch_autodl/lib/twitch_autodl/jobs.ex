@@ -22,11 +22,12 @@ defmodule TwitchAutodl.Jobs do
   def handle_continue(:start_jobs, %{jobs: jobs} = state) do
     running_jobs = Map.keys(jobs)
 
-    new_jobs = State.get_tasks()
-    |> Enum.reject(&TwitchAutodl.Task.finished?/1)
-    |> Enum.reject(&TwitchAutodl.Task.has_errors?/1)
-    |> Enum.reject(&(&1.id in running_jobs))
-    |> Enum.map(&start_task/1)
+    new_jobs =
+      State.get_tasks()
+      |> Enum.reject(&TwitchAutodl.Task.finished?/1)
+      |> Enum.reject(&TwitchAutodl.Task.has_errors?/1)
+      |> Enum.reject(&(&1.id in running_jobs))
+      |> Enum.map(&start_task/1)
 
     {:noreply, %{state | jobs: Enum.into(new_jobs, jobs)}}
   end
@@ -37,9 +38,11 @@ defmodule TwitchAutodl.Jobs do
       {:error, error} ->
         Logger.error("Task [#{id}] failed: #{error}")
         State.add_error(id, error)
+
       {:ok, result} ->
         State.save_task(result)
     end
+
     jobs = Map.delete(jobs, id)
     {:noreply, %{state | jobs: jobs}, {:continue, :start_jobs}}
   end
@@ -62,9 +65,12 @@ defmodule TwitchAutodl.Jobs do
 
   def start_task(%State{id: id} = state) do
     Logger.debug("Starting task for id #{id}")
-    task = Task.async(fn ->
-      {:result, id, TwitchAutodl.Task.run(state)}
-    end)
+
+    task =
+      Task.async(fn ->
+        {:result, id, TwitchAutodl.Task.run(state)}
+      end)
+
     {id, task}
   end
 end

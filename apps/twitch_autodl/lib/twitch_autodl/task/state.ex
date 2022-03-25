@@ -1,7 +1,7 @@
 defmodule TwitchAutodl.Task.State do
   alias TwitchAutodl.Task.State
 
-  defstruct [:id, :data, :options, :next_tasks, :stats, :errors]
+  defstruct [:id, :data, :options, :next_tasks, :stats, :errors, :progress]
 
   def new(id, path, options \\ [])
 
@@ -16,7 +16,8 @@ defmodule TwitchAutodl.Task.State do
       },
       options: options,
       stats: %{},
-      errors: []
+      errors: [],
+      progress: %{}
     }
   end
 
@@ -32,12 +33,29 @@ defmodule TwitchAutodl.Task.State do
   end
 
   def add_error(id, error) do
-    ConfigServer.update(__MODULE__, fn map ->
-      case Map.fetch(map, id) do
-        {:ok, %{errors: errors} = task} -> Map.put(map, id, %{task | errors: [error | errors]})
-        :error -> map
-      end
-    end)
+    ConfigServer.update(
+      __MODULE__,
+      &update_if_present(&1, id, fn %{errors: errors} = task ->
+        %{task | errors: [error | errors]}
+      end)
+    )
+  end
+
+  def set_progress(id, step, progress) do
+    ConfigServer.update(
+      __MODULE__,
+      &update_if_present(&1, id, fn %{progress: progress_map} = task ->
+        progress_map = Map.put(progress_map, step, progress)
+        %{task | progress: progress_map}
+      end)
+    )
+  end
+
+  defp update_if_present(map, key, update_fn) do
+    case Map.fetch(map, key) do
+      {:ok, value} -> Map.put(map, key, update_fn.(value))
+      :error -> map
+    end
   end
 
   # Turn this into a use ConfigServer?

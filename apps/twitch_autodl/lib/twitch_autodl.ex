@@ -3,6 +3,7 @@ defmodule TwitchAutodl do
 
   def download(url) do
     path = TwitchAutodl.Settings.download_folder()
+
     opts = [
       extract_subtitles: TwitchAutodl.Settings.extract_subtitles()
     ]
