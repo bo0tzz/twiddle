@@ -3,7 +3,9 @@
     <h2 class="card-title">
       <%= link(@task.id, to: Routes.task_path(@conn, :show, @task.id)) %>
     </h2>
-    <p>Next step: <%= List.first(@task.next_tasks) %></p>
+    <%= if @task.next_tasks do %>
+      <p>Next step: <%= List.first(@task.next_tasks) %></p>
+    <% end %>
     <p>Download path: <%= @task.data.path %></p>
   </div>
 </div>

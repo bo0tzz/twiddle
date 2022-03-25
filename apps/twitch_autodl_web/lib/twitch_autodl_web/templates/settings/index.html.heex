@@ -21,6 +21,15 @@
         required: true
       ) %>
     </div>
+    <div class="form-control w-full max-w-xs">
+      <label class="label cursor-pointer">
+        <span class="label-text">Extract subtitles</span>
+        <%= checkbox(f, :extract_subtitles,
+        value: @extract_subtitles,
+        class: "checkbox checkbox-primary"
+        ) %>
+      </label>
+    </div>
     <%= submit("Save", class: "btn btn-success mt-2") %>
   <% end %>
 </div>

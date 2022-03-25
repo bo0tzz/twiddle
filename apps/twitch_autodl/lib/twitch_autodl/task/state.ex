@@ -1,7 +1,7 @@
 defmodule TwitchAutodl.Task.State do
   alias TwitchAutodl.Task.State
 
-  defstruct [:id, :data, :options, :next_tasks, :stats]
+  defstruct [:id, :data, :options, :next_tasks, :stats, :errors]
 
   def new(id, path, options \\ [])
 
@@ -15,7 +15,8 @@ defmodule TwitchAutodl.Task.State do
         path: path
       },
       options: options,
-      stats: %{}
+      stats: %{},
+      errors: []
     }
   end
 
@@ -28,6 +29,15 @@ defmodule TwitchAutodl.Task.State do
 
   def save_task(%State{id: id} = task) do
     ConfigServer.update(__MODULE__, &Map.put(&1, id, task))
+  end
+
+  def add_error(id, error) do
+    ConfigServer.update(__MODULE__, fn map ->
+      case Map.fetch(map, id) do
+        {:ok, %{errors: errors} = task} -> Map.put(map, id, %{task | errors: [error | errors]})
+        :error -> map
+      end
+    end)
   end
 
   # Turn this into a use ConfigServer?

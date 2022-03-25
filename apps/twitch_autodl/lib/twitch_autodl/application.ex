@@ -15,7 +15,7 @@ defmodule TwitchAutodl.Application do
       TwitchAutodl.Settings,
       {Phoenix.PubSub, name: TwitchAutodl.PubSub},
       TwitchAutodl.Task.State,
-      TwitchAutodl
+      TwitchAutodl.Jobs
     ]
 
     Supervisor.start_link(children, strategy: :one_for_one, name: TwitchAutodl.Supervisor)

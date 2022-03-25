@@ -15,11 +15,14 @@ defmodule TwitchAutodl.Task do
     TwitchAutodl.Task.Cleanup
   ]
 
-  def initialize(%State{next_tasks: nil} = state), do: %{state | next_tasks: @tasks}
-  def initialize(_), do: {:error, "Already initialized"}
+  def finished?(%State{next_tasks: []}), do: true
+  def finished?(_), do: false
+
+  def has_errors?(%State{errors: errors}) when length(errors) > 0, do: true
+  def has_errors?(_), do: false
 
   def run(%State{next_tasks: []}), do: :finished
-  def run(%State{next_tasks: nil}), do: {:error, "No tasks"}
+  def run(%State{next_tasks: nil} = state), do: {:ok, %{state | next_tasks: @tasks}}
 
   def run(%State{id: id, next_tasks: next_tasks, stats: stats} = state) do
     [task | remaining_tasks] = next_tasks
