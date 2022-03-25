@@ -1,37 +1,21 @@
 defmodule TwitchAutodl do
-  use GenServer
   require Logger
 
-  def start_link(arg) do
-    GenServer.start_link(__MODULE__, arg, name: __MODULE__)
-  end
-
-  @impl true
-  def init(_arg) do
-    path = TwitchAutodl.Settings.download_folder()
-    {:ok, %{path: path}}
-  end
-
-  # TODO: Pull genserver out into separate module
-  @impl true
-  def handle_call({:download, url}, _from, %{path: path} = state) do
-    # TODO: Check if task already exists
-    result =
-      with {:ok, %{host: host, path: url_path}} <- as_uri(url),
-           :ok <- validate_host(host),
-           {:ok, id} <- get_vod_id(url_path),
-           state <- TwitchAutodl.Task.State.new(id, path),
-           state <- TwitchAutodl.Task.initialize(state) do
-        Logger.info("Creating new download task for vod ID #{id}")
-        :ok = TwitchAutodl.Task.State.save_task(state)
-        {:ok, id}
-      end
-
-    {:reply, result, state}
-  end
-
   def download(url) do
-    GenServer.call(__MODULE__, {:download, url})
+    path = TwitchAutodl.Settings.download_folder()
+    opts = [
+      extract_subtitles: TwitchAutodl.Settings.extract_subtitles()
+    ]
+
+    # TODO: Check if task already exists
+    with {:ok, %{host: host, path: url_path}} <- as_uri(url),
+         :ok <- validate_host(host),
+         {:ok, id} <- get_vod_id(url_path),
+         state <- TwitchAutodl.Task.State.new(id, path, opts) do
+      Logger.info("Creating new download task for vod ID #{id}")
+      :ok = TwitchAutodl.Task.State.save_task(state)
+      {:ok, id}
+    end
   end
 
   def get_tasks(), do: TwitchAutodl.Task.State.get_tasks()
