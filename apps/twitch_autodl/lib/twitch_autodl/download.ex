@@ -29,10 +29,32 @@ defmodule TwitchAutodl.Download do
       TwitchAutodl.Task.State.set_progress(id, :download, progress)
       completed
     end)
-    |> Stream.run()
   end
 
   defp download_chunk({url, path}) do
-    {:ok, :saved_to_file} = :httpc.request(:get, {url, []}, [], stream: path)
+    case already_downloaded?({url, path}) do
+      true -> Logger.debug("Skipping #{url}: Already downloaded")
+      false ->
+        File.rm(path) # TODO: byte-range based downloads instead
+        {:ok, :saved_to_file} = :httpc.request(:get, {url, []}, [], stream: path)
+    end
+  end
+
+  def already_downloaded?({url, path}) do
+    with {:ok, %{size: size}} <- File.stat(path),
+         {:ok, {_, headers, _}} <- :httpc.request(:head, {url, []}, [], []),
+         {:ok, length_bin} <- proplist_get(headers, 'content-length'),
+         {length, _} when is_integer(length) <- :string.to_integer(length_bin) do
+      length == size
+    else
+      _ -> false
+    end
+  end
+
+  defp proplist_get(list, value) do
+    case :proplists.get_value(value, list) do
+      :undefined -> {:error, :undefined}
+      value -> {:ok, value}
+    end
   end
 end
