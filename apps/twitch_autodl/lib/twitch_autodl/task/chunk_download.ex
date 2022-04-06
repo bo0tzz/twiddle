@@ -7,7 +7,7 @@ defmodule TwitchAutodl.Task.ChunkDownload do
           data: %{working_dir: path, m3u8: %{qualities: [quality | _]} = m3u8}
         } = state
       ) do
-    :ok = TwitchAutodl.Download.download_chunks(m3u8, quality, path, id)
+    TwitchAutodl.Download.download_chunks(m3u8, quality, path, id)
     {:ok, state}
   end
 end

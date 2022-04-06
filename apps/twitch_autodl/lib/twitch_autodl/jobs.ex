@@ -40,6 +40,7 @@ defmodule TwitchAutodl.Jobs do
         State.add_error(id, error)
 
       {:ok, result} ->
+        # TODO: This save call overrides the progress set by the task
         State.save_task(result)
     end
 

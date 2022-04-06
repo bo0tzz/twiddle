@@ -15,7 +15,7 @@ defmodule TwitchAutodl.FFmpeg.Parser do
     }
   end
 
-  def progress(%Parser{progress: nil}), do: :unknown
+  def progress(%Parser{progress: nil}), do: 0
 
   def progress(%Parser{progress: p, duration: d}),
     do:

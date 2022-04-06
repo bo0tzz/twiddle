@@ -1,11 +1,16 @@
 <div class="card bg-neutral text-neutral-content">
   <div class="card-body items-center text-center">
     <h2 class="card-title">
-      <%= link(@task.id, to: Routes.task_path(@conn, :show, @task.id)) %>
+      <%= link(title(@task), to: Routes.task_path(@conn, :show, @task.id)) %>
     </h2>
     <%= if @task.next_tasks do %>
-      <p>Next step: <%= List.first(@task.next_tasks) %></p>
+      <p>Next step: <%= List.first(@task.next_tasks) |> friendly_name() %></p>
     <% end %>
     <p>Download path: <%= @task.data.path %></p>
+    <p>Progress:</p>
+    <%= for {step, progress} <- @task.progress do %>
+      <p><%= friendly_name(step) %>: <%= Float.round(progress) %>% </p>
+      <progress class="progress progress-success" value={progress} max="100"></progress>
+    <% end %>
   </div>
 </div>
