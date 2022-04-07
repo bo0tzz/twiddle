@@ -6,20 +6,28 @@ defmodule Twiddle.FFmpeg do
 
   defstruct [:pids, :status, :update_progress]
 
-  @concat_cmd 'ffmpeg -i index.m3u8 -codec copy index.ts -y'
-  @remux_cmd 'ffmpeg -i index.ts -codec copy index.mkv -y'
-  @subs_cmd 'ffmpeg -f lavfi -i "movie=index.ts[out0+subcc]" index.srt -y'
+  @concat ["-i", "index.m3u8", "-codec", "copy", "index.ts", "-y"]
+  @remux ["-i", "index.ts", "-codec", "copy", "index.mkv", "-y"]
+  @subs ["-f", "lavfi", "-i", ~s("movie=index.ts[out0+subcc]"), "index.srt", "-y"]
 
   def concatenate_chunks(path, duration, update_progress) do
-    run(@concat_cmd, path, duration, update_progress)
+    ffmpeg_cmd(@concat)
+    |> run(path, duration, update_progress)
   end
 
   def remux(path, duration, update_progress) do
-    run(@remux_cmd, path, duration, update_progress)
+    ffmpeg_cmd(@remux)
+    |> run(path, duration, update_progress)
   end
 
   def extract_subs(path, duration, update_progress) do
-    run(@subs_cmd, path, duration, update_progress)
+    ffmpeg_cmd(@subs)
+    |> run(path, duration, update_progress)
+  end
+
+  defp ffmpeg_cmd(args) do
+    bin = Application.fetch_env!(:twiddle, __MODULE__)[:binary]
+    [bin | args]
   end
 
   def run(command, path, duration_hint, update_progress) do

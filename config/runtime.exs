@@ -1,11 +1,8 @@
 import Config
 
-# config/runtime.exs is executed for all environments, including
-# during releases. It is executed after compilation and before the
-# system starts, so it is typically used to load production configuration
-# and secrets from environment variables or elsewhere. Do not define
-# any compile-time configuration in here, as it won't be applied.
-# The block below contains prod specific runtime configuration.
+ffmpeg_bin = System.get_env("FFMPEG_BIN") || System.find_executable("ffmpeg")
+config :twiddle, Twiddle.FFmpeg, binary: ffmpeg_bin
+
 if config_env() == :prod do
   # The secret key base is used to sign/encrypt cookies and other secrets.
   # A default value is used in config/dev.exs and config/test.exs but you
