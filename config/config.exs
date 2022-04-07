@@ -9,11 +9,8 @@
 # move said applications out of the umbrella.
 import Config
 
-config :twiddle_web,
-  generators: [context_app: :twiddle]
-
 # Configures the endpoint
-config :twiddle_web, TwiddleWeb.Endpoint,
+config :twiddle, TwiddleWeb.Endpoint,
   url: [host: "localhost"],
   render_errors: [view: TwiddleWeb.ErrorView, accepts: ~w(html json), layout: false],
   pubsub_server: Twiddle.PubSub,
@@ -25,7 +22,7 @@ config :esbuild,
   default: [
     args:
       ~w(js/app.js --bundle --target=es2017 --outdir=../priv/static/assets --external:/fonts/* --external:/images/*),
-    cd: Path.expand("../apps/twiddle_web/assets", __DIR__),
+    cd: Path.expand("../assets", __DIR__),
     env: %{"NODE_PATH" => Path.expand("../deps", __DIR__)}
   ]
 
@@ -45,7 +42,7 @@ config :tailwind,
       --input=css/app.css
       --output=../priv/static/assets/app.css
     ),
-    cd: Path.expand("../apps/twiddle_web/assets", __DIR__)
+    cd: Path.expand("../assets", __DIR__)
   ]
 
 # Import environment specific config. This must remain at the bottom

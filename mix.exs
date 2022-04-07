@@ -1,31 +1,59 @@
-defmodule Twiddle.Umbrella.MixProject do
+defmodule Twiddle.MixProject do
   use Mix.Project
 
   def project do
     [
-      apps_path: "apps",
+      app: :twiddle,
       version: "0.1.0",
+      elixir: "~> 1.12",
+      elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
-      deps: deps(),
-      aliases: aliases()
+      aliases: aliases(),
+      deps: deps()
     ]
   end
 
-  # Dependencies can be Hex packages:
-  #
-  #   {:mydep, "~> 0.3.0"}
-  #
-  # Or git/path repositories:
-  #
-  #   {:mydep, git: "https://github.com/elixir-lang/mydep.git", tag: "0.1.0"}
-  #
-  # Type "mix help deps" for more examples and options.
-  #
-  # Dependencies listed here are available only for this project
-  # and cannot be accessed from applications inside the apps/ folder.
   defp deps do
-    []
+    [
+      {:phoenix, "~> 1.6.6"},
+      {:phoenix_html, "~> 3.0"},
+      {:phoenix_live_reload, "~> 1.2", only: :dev},
+      {:phoenix_live_view, "~> 0.17.5"},
+      {:floki, ">= 0.30.0", only: :test},
+      {:phoenix_live_dashboard, "~> 0.6"},
+      {:esbuild, "~> 0.3", runtime: Mix.env() == :dev},
+      {:telemetry_metrics, "~> 0.6"},
+      {:telemetry_poller, "~> 1.0"},
+      {:gettext, "~> 0.18"},
+      {:jason, "~> 1.2"},
+      {:plug_cowboy, "~> 2.5"},
+      {:ex_fontawesome, "~> 0.7.0"},
+      {:tailwind, "~> 0.1", only: :dev},
+      # TODO: This formatter will be included in a new liveview release
+      {:heex_formatter, github: "feliperenan/heex_formatter", only: :dev},
+
+      {:phoenix_pubsub, "~> 2.0"},
+      {:tesla, "~> 1.4"},
+      {:hackney, "~> 1.17"},
+      {:erlexec, "~> 1.0"},
+      {:timex, "~> 3.0"},
+      {:neuron, "~> 5.0.0"},
+      {:maptu, "~> 1.0"},
+
+      # TODO: Use proper dependency
+      {:config_server, path: "../config_server"}
+    ]
   end
+
+  def application do
+    [
+      mod: {Twiddle.Application, []},
+      extra_applications: [:logger, :runtime_tools, :inets, :ssl]
+    ]
+  end
+
+  defp elixirc_paths(:test), do: ["lib", "test/support"]
+  defp elixirc_paths(_), do: ["lib"]
 
   # Aliases are shortcuts or tasks specific to the current project.
   # For example, to install project dependencies and perform other setup tasks, run:
@@ -38,8 +66,8 @@ defmodule Twiddle.Umbrella.MixProject do
   # and cannot be accessed from applications inside the apps/ folder.
   defp aliases do
     [
-      # run `mix setup` in all child apps
-      setup: ["cmd mix setup"]
+      setup: ["deps.get"],
+      "assets.deploy": ["tailwind default --minify", "esbuild default --minify", "phx.digest"]
     ]
   end
 end

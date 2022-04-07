@@ -20,5 +20,5 @@ defmodule TwiddleWeb.Gettext do
 
   See the [Gettext Docs](https://hexdocs.pm/gettext) for detailed usage.
   """
-  use Gettext, otp_app: :twiddle_web
+  use Gettext, otp_app: :twiddle
 end

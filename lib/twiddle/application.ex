@@ -15,9 +15,18 @@ defmodule Twiddle.Application do
       Twiddle.Settings,
       {Phoenix.PubSub, name: Twiddle.PubSub},
       Twiddle.Task.State,
-      Twiddle.Jobs
+      Twiddle.Jobs,
+
+      TwiddleWeb.Telemetry,
+      TwiddleWeb.Endpoint
     ]
 
     Supervisor.start_link(children, strategy: :one_for_one, name: Twiddle.Supervisor)
+  end
+
+  @impl true
+  def config_change(changed, _new, removed) do
+    TwiddleWeb.Endpoint.config_change(changed, removed)
+    :ok
   end
 end

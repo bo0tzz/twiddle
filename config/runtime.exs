@@ -19,7 +19,7 @@ if config_env() == :prod do
       You can generate one by calling: mix phx.gen.secret
       """
 
-  config :twiddle_web, TwiddleWeb.Endpoint,
+  config :twiddle, TwiddleWeb.Endpoint,
     http: [
       # Enable IPv6 and bind on all interfaces.
       # Set it to  {0, 0, 0, 0, 0, 0, 0, 1} for local network only access.
@@ -33,7 +33,7 @@ if config_env() == :prod do
   # If you are doing OTP releases, you need to instruct Phoenix
   # to start each relevant endpoint:
   #
-  #     config :twiddle_web, TwiddleWeb.Endpoint, server: true
+  #     config :twiddle, TwiddleWeb.Endpoint, server: true
   #
   # Then you can assemble a release by calling `mix release`.
   # See `mix help release` for more information.
