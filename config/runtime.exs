@@ -1,5 +1,9 @@
 import Config
 
+if System.get_env("PHX_SERVER") && System.get_env("RELEASE_NAME") do
+  config :twiddle, TwiddleWeb.Endpoint, server: true
+end
+
 ffmpeg_bin = System.get_env("FFMPEG_BIN") || System.find_executable("ffmpeg")
 config :twiddle, Twiddle.FFmpeg, binary: ffmpeg_bin
 
