@@ -9,14 +9,14 @@
 # move said applications out of the umbrella.
 import Config
 
-config :twitch_autodl_web,
-  generators: [context_app: :twitch_autodl]
+config :twiddle_web,
+  generators: [context_app: :twiddle]
 
 # Configures the endpoint
-config :twitch_autodl_web, TwitchAutodlWeb.Endpoint,
+config :twiddle_web, TwiddleWeb.Endpoint,
   url: [host: "localhost"],
-  render_errors: [view: TwitchAutodlWeb.ErrorView, accepts: ~w(html json), layout: false],
-  pubsub_server: TwitchAutodl.PubSub,
+  render_errors: [view: TwiddleWeb.ErrorView, accepts: ~w(html json), layout: false],
+  pubsub_server: Twiddle.PubSub,
   live_view: [signing_salt: "/TlsLcGd"]
 
 # Configure esbuild (the version is required)
@@ -25,7 +25,7 @@ config :esbuild,
   default: [
     args:
       ~w(js/app.js --bundle --target=es2017 --outdir=../priv/static/assets --external:/fonts/* --external:/images/*),
-    cd: Path.expand("../apps/twitch_autodl_web/assets", __DIR__),
+    cd: Path.expand("../apps/twiddle_web/assets", __DIR__),
     env: %{"NODE_PATH" => Path.expand("../deps", __DIR__)}
   ]
 
@@ -45,7 +45,7 @@ config :tailwind,
       --input=css/app.css
       --output=../priv/static/assets/app.css
     ),
-    cd: Path.expand("../apps/twitch_autodl_web/assets", __DIR__)
+    cd: Path.expand("../apps/twiddle_web/assets", __DIR__)
   ]
 
 # Import environment specific config. This must remain at the bottom

@@ -1,4 +1,4 @@
-defmodule TwitchAutodl.Umbrella.MixProject do
+defmodule Twiddle.Umbrella.MixProject do
   use Mix.Project
 
   def project do

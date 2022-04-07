@@ -1,3 +1,0 @@
-# TwitchAutodl
-
-**TODO: Add description**
