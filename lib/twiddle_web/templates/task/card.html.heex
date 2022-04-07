@@ -9,7 +9,7 @@
     <p>Download path: <%= @task.data.path %></p>
     <p>Progress:</p>
     <%= for {step, progress} <- @task.progress do %>
-      <p><%= friendly_name(step) %>: <%= Float.round(progress) %>% </p>
+      <p><%= friendly_name(step) %>: <%= Float.round(progress) %>%</p>
       <progress class="progress progress-success" value={progress} max="100"></progress>
     <% end %>
   </div>

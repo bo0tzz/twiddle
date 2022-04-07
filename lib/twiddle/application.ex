@@ -16,7 +16,6 @@ defmodule Twiddle.Application do
       {Phoenix.PubSub, name: Twiddle.PubSub},
       Twiddle.Task.State,
       Twiddle.Jobs,
-
       TwiddleWeb.Telemetry,
       TwiddleWeb.Endpoint
     ]

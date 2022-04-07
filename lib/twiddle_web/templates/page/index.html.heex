@@ -9,17 +9,17 @@
   <% end %>
   <div class="w-2/5">
     <%= form_for @conn, Routes.page_path(@conn, :create), [class: "input-group"], fn f -> %>
-    <div class="form-control w-full max-w-xs">
-      <%= error_tag @errors, :url %>
-      <div class="input-group">
-        <%= url_input(f, :url,
-          placeholder: "VOD url",
-          class: ["input", "input-bordered", "w-3/5"],
-          required: true
-        ) %>
-        <%= submit("Download", class: "btn btn-info") %>
+      <div class="form-control w-full max-w-xs">
+        <%= error_tag(@errors, :url) %>
+        <div class="input-group">
+          <%= url_input(f, :url,
+            placeholder: "VOD url",
+            class: ["input", "input-bordered", "w-3/5"],
+            required: true
+          ) %>
+          <%= submit("Download", class: "btn btn-info") %>
+        </div>
       </div>
-    </div>
     <% end %>
   </div>
 </div>

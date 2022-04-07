@@ -31,7 +31,6 @@ defmodule Twiddle.MixProject do
       {:tailwind, "~> 0.1", only: :dev},
       # TODO: This formatter will be included in a new liveview release
       {:heex_formatter, github: "feliperenan/heex_formatter", only: :dev},
-
       {:phoenix_pubsub, "~> 2.0"},
       {:tesla, "~> 1.4"},
       {:hackney, "~> 1.17"},
@@ -39,7 +38,6 @@ defmodule Twiddle.MixProject do
       {:timex, "~> 3.0"},
       {:neuron, "~> 5.0.0"},
       {:maptu, "~> 1.0"},
-
       {:config_server, git: "https://github.com/bo0tzz/config_server.git"}
     ]
   end

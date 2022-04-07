@@ -22,5 +22,4 @@ defmodule TwiddleWeb.Application do
 
   # Tell Phoenix to update the endpoint configuration
   # whenever the application is updated.
-
 end

@@ -33,9 +33,12 @@ defmodule Twiddle.Download do
 
   defp download_chunk({url, path}) do
     case already_downloaded?({url, path}) do
-      true -> Logger.debug("Skipping #{url}: Already downloaded")
+      true ->
+        Logger.debug("Skipping #{url}: Already downloaded")
+
       false ->
-        File.rm(path) # TODO: byte-range based downloads instead
+        # TODO: byte-range based downloads instead
+        File.rm(path)
         {:ok, :saved_to_file} = :httpc.request(:get, {url, []}, [], stream: path)
     end
   end
