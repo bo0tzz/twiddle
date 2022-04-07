@@ -31,7 +31,7 @@ defmodule Twiddle.Settings do
     options = [
       name: __MODULE__,
       # TODO: From env
-      path: "config.yaml",
+      path: Application.fetch_env!(:twiddle, :config_file),
       default_fn: fn -> %Twiddle.Settings{} end,
       storage: ConfigServer.Storage.Yaml,
       save_hook: &Map.from_struct/1,

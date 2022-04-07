@@ -6,6 +6,7 @@ end
 
 ffmpeg_bin = System.get_env("FFMPEG_BIN") || System.find_executable("ffmpeg")
 config :twiddle, Twiddle.FFmpeg, binary: ffmpeg_bin
+config :twiddle, :config_file, System.get_env("CONFIG_FILE", "config.yaml")
 
 if config_env() == :prod do
   # The secret key base is used to sign/encrypt cookies and other secrets.
