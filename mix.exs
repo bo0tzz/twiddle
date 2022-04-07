@@ -40,8 +40,7 @@ defmodule Twiddle.MixProject do
       {:neuron, "~> 5.0.0"},
       {:maptu, "~> 1.0"},
 
-      # TODO: Use proper dependency
-      {:config_server, path: "../config_server"}
+      {:config_server, git: "https://github.com/bo0tzz/config_server.git"}
     ]
   end
 
