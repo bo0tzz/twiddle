@@ -12,3 +12,4 @@ This is a mess right now
   * sed -i.bkp "s/\\\h//g" file.srt
   * Subtitle offset
 * Job progress reporting system (w/ pubsub?)
+* Character replacements in output filenames (remove illegal characters/spaces)
