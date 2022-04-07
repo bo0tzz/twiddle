@@ -24,3 +24,5 @@ erl_crash.dump
 
 *.iml
 .idea/
+state.db
+config.yaml
