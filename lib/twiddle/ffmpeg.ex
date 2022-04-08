@@ -8,7 +8,7 @@ defmodule Twiddle.FFmpeg do
 
   @concat ["-i", "index.m3u8", "-codec", "copy", "index.ts", "-y"]
   @remux ["-i", "index.ts", "-codec", "copy", "index.mkv", "-y"]
-  @subs ["-f", "lavfi", "-i", ~s("movie=index.ts[out0+subcc]"), "index.srt", "-y"]
+  @subs ["-f", "lavfi", "-i", "movie=index.ts[out0+subcc]", "index.srt", "-y"]
 
   def concatenate_chunks(path, duration, update_progress) do
     ffmpeg_cmd(@concat)
