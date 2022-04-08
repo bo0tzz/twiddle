@@ -48,4 +48,4 @@ config :twiddle, TwiddleWeb.Endpoint,
 # Check `Plug.SSL` for all available options in `force_ssl`.
 
 # Do not print debug messages in production
-config :logger, level: :info
+config :logger, level: :debug
