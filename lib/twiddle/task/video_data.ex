@@ -6,8 +6,13 @@ defmodule Twiddle.Task.VideoData do
       nil ->
         {:error, "Video ID not found"}
 
-      %{"title" => title, "lengthSeconds" => duration} ->
-        data = data |> Map.put(:title, title) |> Map.put(:duration, duration)
+      %{"title" => title, "lengthSeconds" => duration, "animatedPreviewURL" => animatedPreviewURL} ->
+        data =
+          data
+          |> Map.put(:title, title)
+          |> Map.put(:duration, duration)
+          |> Map.put(:animatedPreviewURL, animatedPreviewURL)
+
         {:ok, %{state | data: data}}
     end
   end

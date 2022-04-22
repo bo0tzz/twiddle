@@ -4,6 +4,7 @@ defmodule Twiddle.Gql do
       video(id: $id) {
         title
         lengthSeconds
+        animatedPreviewURL
       }
     }
   """
