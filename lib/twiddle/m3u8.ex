@@ -3,21 +3,21 @@ defmodule Twiddle.M3U8 do
 
   alias Twiddle.M3U8
 
-  # TODO: Do I need original_playlist?
-  defstruct [:base, :qualities, :filename, :original_playlist]
+  defstruct [:base, :qualities, :filename]
 
-  def new(playlist) do
-    urls = get_playlist_entries(playlist)
+  def new(playlist), do: get_playlist_entries(playlist) |> new_from_urls()
 
+  def new_from_urls(url) when not is_list(url), do: new_from_urls([url])
+
+  def new_from_urls(urls) do
     parts = Enum.map(urls, &snip_url/1)
     {filename, _, base} = List.first(parts)
-    qualities = ["chunked" | Enum.map(parts, &elem(&1, 1))]
+    qualities = ["chunked" | Enum.map(parts, &elem(&1, 1))] |> Enum.uniq()
 
     %M3U8{
       base: base,
       qualities: qualities,
-      filename: filename,
-      original_playlist: playlist
+      filename: filename
     }
   end
 
