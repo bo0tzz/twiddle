@@ -42,7 +42,7 @@ defmodule Twiddle.Task.State do
   end
 
   def set_progress(id, step, progress) do
-    ConfigServer.update(
+    if report_progress?(progress), do: ConfigServer.update(
       __MODULE__,
       &update_if_present(&1, id, fn %{progress: progress_map} = task ->
         progress_map = Map.put(progress_map, step, progress)
@@ -50,6 +50,8 @@ defmodule Twiddle.Task.State do
       end)
     )
   end
+
+  defp report_progress?(progress), do: 0 == round(progress) |> Integer.mod(5)
 
   defp update_if_present(map, key, update_fn) do
     case Map.fetch(map, key) do
