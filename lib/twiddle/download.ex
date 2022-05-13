@@ -26,10 +26,12 @@ defmodule Twiddle.Download do
     |> Enum.reduce(0, fn _, completed ->
       completed = completed + 1
       progress = completed / chunk_count * 100
-      Twiddle.Task.State.set_progress(id, :download, progress)
+      if report?(progress), do: Twiddle.Task.State.set_progress(id, :download, progress)
       completed
     end)
   end
+
+  def report?(progress), do: 0 == round(progress) |> Integer.mod(5)
 
   defp download_chunk({url, path}) do
     case already_downloaded?({url, path}) do
